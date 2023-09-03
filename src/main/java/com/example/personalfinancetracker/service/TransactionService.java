@@ -28,8 +28,9 @@ public class TransactionService {
             balance.setIncomeTotal(balance.getIncomeTotal().add(transaction.getAmount()));
         } else {
             balance.setTotal(balance.getTotal().subtract(transaction.getAmount()));
-            balance.setIncomeTotal(balance.getExpenseTotal().add(transaction.getAmount()));
+            balance.setExpenseTotal(balance.getExpenseTotal().add(transaction.getAmount()));
         }
+        balanceRepository.save(balance);
         return ResponseEntity.ok("Transaction created successfully");
     }
 
@@ -56,7 +57,7 @@ public class TransactionService {
         return ResponseEntity.ok("Transaction updated successfully");
     }
 
-    public ResponseEntity<String> delete(Long transactionId) {
+    public ResponseEntity<String> delete(Long transactionId, Long userId) {
         repo.deleteByIdAndUserId(transactionId, );
         return ResponseEntity.ok("Transaction deleted successfully");
     }

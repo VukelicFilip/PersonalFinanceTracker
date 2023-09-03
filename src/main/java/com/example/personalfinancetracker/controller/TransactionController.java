@@ -7,24 +7,24 @@ import com.example.personalfinancetracker.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
-@Validated
 @RequiredArgsConstructor
-@RequestMapping(path = "/transactions")
+@RequestMapping(path = "/api/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
+    //staviti status 201 created
     @PostMapping(path = "/create")
     public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction, @RequestParam Long userId) {
         return transactionService.create(transaction,userId);
     }
 
+    //By REST convention, the best solution would be to have 3 controllers for these 3 read methods
+    //in order to avoid additional naming but to keep this example simple I opted for different approach
     @GetMapping(path = "/read-all")
     public ResponseEntity<List<TransactionDTO>> readAll(@RequestParam Long userId){
         return transactionService.readAll(userId);
