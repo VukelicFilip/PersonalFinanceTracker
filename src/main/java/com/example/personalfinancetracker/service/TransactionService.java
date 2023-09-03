@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -46,6 +47,9 @@ public class TransactionService {
         return ResponseEntity.ok(repo.findByUserIdAndType(userId, TransactionType.EXPENSE));
     }
 
+    public ResponseEntity<Balance> readBalance(Long userId){
+        ResponseEntity.ok(balanceRepository.findById(userId));
+    }
 
     public ResponseEntity<String> update(Long transactionId, Transaction updateInfo) {
         Transaction toBeUpdated = repo.findById(transactionId).get();
