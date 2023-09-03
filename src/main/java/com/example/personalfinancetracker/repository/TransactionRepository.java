@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-        List<TransactionDTO> findByUserId(Long userId);
-        List<TransactionDTO> findByUserIdAndType(Long userId,TransactionType transactionType);
-        void deleteByIdAndUserId(Long id, Long userId);
+    List<TransactionDTO> findByUserId(Long userId);
+
+    List<TransactionDTO> findByUserIdAndType(Long userId, TransactionType transactionType);
+
+    void deleteByIdAndUserId(Long id, Long userId);
 }

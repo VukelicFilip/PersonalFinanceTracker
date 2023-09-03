@@ -10,8 +10,11 @@ import java.math.BigDecimal;
 public interface TransactionDTO {
 
     Long getId();
+
     TransactionType getType();
+
     BigDecimal getAmount();
+
     String getDescription();
 
 }

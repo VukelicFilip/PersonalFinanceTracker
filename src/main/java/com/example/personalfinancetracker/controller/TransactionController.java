@@ -17,8 +17,8 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping(path = "/create")
-    public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction) {
-        return transactionService.create(transaction);
+    public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction, @RequestParam Long userId) {
+        return transactionService.create(transaction,userId);
     }
     @PutMapping(path = "/update")
     public ResponseEntity<String> update(@RequestParam Long transactionId,@Valid @RequestBody Transaction updateInfo){

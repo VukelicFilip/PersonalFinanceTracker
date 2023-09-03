@@ -7,5 +7,5 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TransactionMapper {
-        void update(@MappingTarget Transaction transaction, Transaction updateInfo);
+    void update(@MappingTarget Transaction transaction, Transaction updateInfo);
 }
