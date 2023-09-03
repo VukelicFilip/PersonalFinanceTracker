@@ -10,8 +10,6 @@ import com.example.personalfinancetracker.util.TransactionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -48,7 +46,7 @@ public class TransactionService {
     }
 
     public ResponseEntity<Balance> readBalance(Long userId){
-        ResponseEntity.ok(balanceRepository.findById(userId));
+        return ResponseEntity.ok(balanceRepository.findById(userId).get());
     }
 
     public ResponseEntity<String> update(Long transactionId, Transaction updateInfo) {
