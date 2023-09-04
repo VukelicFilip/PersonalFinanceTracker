@@ -1,5 +1,6 @@
 package com.example.personalfinancetracker.service;
 
+import com.example.personalfinancetracker.exception_handling.UnauthorizedException;
 import com.example.personalfinancetracker.repository.UserRepository;
 import com.example.personalfinancetracker.security.JwtUtils;
 import com.example.personalfinancetracker.security.UserDetailsImpl;
@@ -40,14 +41,10 @@ public class AuthService {
         UserDetailsImpl tokenUser;
         try {
             tokenUser = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            System.out.println("STIGAO DO STAMPE");
-            System.out.println(tokenUser.getUserId());
             return tokenUser.getUserId();
         } catch (Exception e) {
             e.printStackTrace();
-            /*throw new UnauthorizedException("User is not signed in");*/
+            throw new UnauthorizedException("User is not signed in");
         }
-        //TODO POGLEDATI OVO MALO JE UZAS
-        return null;
     }
 }

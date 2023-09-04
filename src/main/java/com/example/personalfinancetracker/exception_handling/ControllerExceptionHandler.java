@@ -211,62 +211,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	/**
-	 * Handle ValidationException
-	 *
-	 * @param ex
-	 *            the ValidationException
-	 * @return the ResourceError object
-	 */
-	@ExceptionHandler(ValidationException.class)
-	protected ResponseEntity<Object> handleValidationException(ValidationException ex) {
-		ResourceError error = new ResourceError(HttpStatus.BAD_REQUEST);
-		error.setMessage(ex.getMessage());
-		return buildResponseEntity(error);
-	}
-	
-	/**
-	 * Handle ForbiddenException
-	 *
-	 * @param ex
-	 *            the Exception
-	 * @return the ResourceError object
-	 */
-	@ExceptionHandler(ForbiddenException.class)
-	protected ResponseEntity<Object> handleForbiddenException(Exception ex) {
-		ResourceError error = new ResourceError(HttpStatus.FORBIDDEN);
-		error.setMessage(ex.getMessage());
-		return buildResponseEntity(error);
-	}
-	
-	/**
-	 * Handle HttpHostConnectException
-	 *
-	 * @param ex
-	 *            the Exception
-	 * @return the ResourceError object
-	 */
-	@ExceptionHandler(HttpHostConnectException.class)
-	protected ResponseEntity<Object> handleHttpHostConnectException(Exception ex) {
-		ResourceError error = new ResourceError(HttpStatus.SERVICE_UNAVAILABLE);
-		error.setMessage(ex.getMessage());
-		return buildResponseEntity(error);
-	}
-	
-	/**
-	 * Handle NotFoundException
-	 *
-	 * @param ex
-	 *            the Exception
-	 * @return the ResourceError object
-	 */
-	@ExceptionHandler(NotFoundException.class)
-	protected ResponseEntity<Object> handleNotFoundException(Exception ex) {
-		ResourceError error = new ResourceError(HttpStatus.NOT_FOUND);
-		error.setMessage(ex.getMessage());
-		return buildResponseEntity(error);
-	}
-	
-	/**
 	 * Handle UnauthorizedException
 	 *
 	 * @param ex

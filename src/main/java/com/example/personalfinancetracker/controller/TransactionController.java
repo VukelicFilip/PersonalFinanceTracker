@@ -52,7 +52,7 @@ public class TransactionController {
     //OBAVEZNO PROMENITI OVO SA USER ID
     @DeleteMapping(path = "/delete")
     public ResponseEntity<String> delete(@RequestParam Long transactionId){
-        return transactionService.delete(transactionId, 69l);
+        return transactionService.delete(transactionId, authService.getJwtUserId());
     }
 
 
