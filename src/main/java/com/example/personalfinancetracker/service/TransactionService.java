@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,22 +26,7 @@ public class TransactionService {
     public ResponseEntity<String> create(Transaction transaction, Long userId) {
         transaction.setUserId(userId);
         repo.save(transaction);
-        Optional<Balance> balanceOptional = balanceRepository.findById(userId);
-        Balance balance;
-        if (balanceOptional.isPresent()) {
-            balance = balanceOptional.get();
-        } else {
-            balance = new Balance();
-            balance.setUserId(userId);
-        }
-        if (transaction.getType().equals(TransactionType.INCOME)) {
-            balance.setTotal(balance.getTotal().add(transaction.getAmount()));
-            balance.setIncomeTotal(balance.getIncomeTotal().add(transaction.getAmount()));
-        } else {
-            balance.setTotal(balance.getTotal().subtract(transaction.getAmount()));
-            balance.setExpenseTotal(balance.getExpenseTotal().add(transaction.getAmount()));
-        }
-        balanceRepository.save(balance);
+        balanceUpdate(userId, transaction.getType(), transaction.getAmount());
         return ResponseEntity.ok("Transaction created successfully");
     }
 
@@ -61,15 +47,47 @@ public class TransactionService {
     }
 
     public ResponseEntity<String> update(Long transactionId, Transaction updateInfo, Long userId) {
-        Transaction toBeUpdated = repo.findByIdAndUserId(transactionId, userId).get();
-        transactionMapper.update(toBeUpdated, updateInfo);
-        repo.save(toBeUpdated);
-        return ResponseEntity.ok("Transaction updated successfully");
+        Optional<Transaction> transactionOptional = repo.findByIdAndUserId(transactionId, userId);
+        if(transactionOptional.isPresent()){
+            Transaction toBeUpdated = transactionOptional.get();
+            if(toBeUpdated.getAmount()!=null){
+                balanceUpdate(userId, toBeUpdated.getType(), toBeUpdated.getAmount().subtract(updateInfo.getAmount()).negate());
+            }
+            transactionMapper.update(toBeUpdated, updateInfo);
+            repo.save(toBeUpdated);
+            return ResponseEntity.ok("Transaction updated successfully");
+        }
+        return ResponseEntity.badRequest().body("Wrong transaction id");
     }
 
     public ResponseEntity<String> delete(Long transactionId, Long userId) {
-        repo.deleteByIdAndUserId(transactionId, userId);
-        return ResponseEntity.ok("Transaction deleted successfully");
+        Optional<Transaction> transactionOptional = repo.findByIdAndUserId(transactionId, userId);
+        if(transactionOptional.isPresent()){
+            balanceUpdate(userId, transactionOptional.get().getType(),transactionOptional.get().getAmount().negate());
+            repo.deleteById(transactionId);
+            return ResponseEntity.ok("Transaction deleted successfully");
+        }
+        return ResponseEntity.badRequest().body("Wrong transaction Id");
+    }
+
+
+    private void balanceUpdate(Long userId, TransactionType transactionType, BigDecimal amounth){
+        Optional<Balance> balanceOptional = balanceRepository.findById(userId);
+        Balance balance;
+        if (balanceOptional.isPresent()) {
+            balance = balanceOptional.get();
+        } else {
+            balance = new Balance();
+            balance.setUserId(userId);
+        }
+        if (transactionType.equals(TransactionType.INCOME)) {
+            balance.setTotal(balance.getTotal().add(amounth));
+            balance.setIncomeTotal(balance.getIncomeTotal().add(amounth));
+        } else {
+            balance.setTotal(balance.getTotal().subtract(amounth));
+            balance.setExpenseTotal(balance.getExpenseTotal().add(amounth));
+        }
+        balanceRepository.save(balance);
     }
 
 }
