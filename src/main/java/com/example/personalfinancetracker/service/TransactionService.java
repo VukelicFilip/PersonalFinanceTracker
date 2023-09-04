@@ -6,6 +6,7 @@ import com.example.personalfinancetracker.model.TransactionDTO;
 import com.example.personalfinancetracker.model.TransactionType;
 import com.example.personalfinancetracker.repository.BalanceRepository;
 import com.example.personalfinancetracker.repository.TransactionRepository;
+import com.example.personalfinancetracker.util.TransactionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository repo;
-    /*private final TransactionMapper transactionMapper;*/
+    private final TransactionMapper transactionMapper;
     private final BalanceRepository balanceRepository;
 
     public ResponseEntity<String> create(Transaction transaction, Long userId) {
@@ -51,9 +52,9 @@ public class TransactionService {
         return ResponseEntity.ok(balanceRepository.findById(userId).get());
     }
 
-    public ResponseEntity<String> update(Long transactionId, Transaction updateInfo) {
-        Transaction toBeUpdated = repo.findById(transactionId).get();
-        /*transactionMapper.update(toBeUpdated, updateInfo);*/
+    public ResponseEntity<String> update(Long transactionId, Transaction updateInfo, Long userId) {
+        Transaction toBeUpdated = repo.findByIdAndUserId(transactionId, userId).get();
+        transactionMapper.update(toBeUpdated, updateInfo);
         repo.save(toBeUpdated);
         return ResponseEntity.ok("Transaction updated successfully");
     }

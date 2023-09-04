@@ -1,4 +1,4 @@
-package com.example.personalfinancetracker.exceptions;
+package com.example.personalfinancetracker.exception_handling;
 
 public class ValidationException extends RuntimeException {
 	

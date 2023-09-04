@@ -22,36 +22,31 @@ public class TransactionController {
     //staviti status 201 created
     @PostMapping(path = "/create")
     public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction) {
-        System.out.println("PRINT 2");
-        Long userId = authService.getJwtUserId();
-        System.out.println(userId);
-        return transactionService.create(transaction,userId);
+        return transactionService.create(transaction,authService.getJwtUserId());
     }
 
-    //By REST convention, the best solution would be to have 3 controllers for these 3 read methods
-    //in order to avoid additional naming but to keep this example simple I opted for different approach
     @GetMapping(path = "/read-all")
-    public ResponseEntity<List<TransactionDTO>> readAll(@RequestParam Long userId){
-        return transactionService.readAll(userId);
+    public ResponseEntity<List<TransactionDTO>> readAll(){
+        return transactionService.readAll(authService.getJwtUserId());
     }
 
     @GetMapping(path = "/read-income")
-    public ResponseEntity<List<TransactionDTO>> readIncome(@RequestParam Long userId){
-        return transactionService.readIncomeTransactions(userId);
+    public ResponseEntity<List<TransactionDTO>> readIncome(){
+        return transactionService.readIncomeTransactions(authService.getJwtUserId());
     }
 
     @GetMapping(path = "/read-expense")
-    public ResponseEntity<List<TransactionDTO>> readExpense(@RequestParam Long userId){
-        return transactionService.readExpenseTransactions(userId);
+    public ResponseEntity<List<TransactionDTO>> readExpense(){
+        return transactionService.readExpenseTransactions(authService.getJwtUserId());
     }
 
     @GetMapping(path = "/read-balance")
-    public ResponseEntity<Balance> readBalance(@RequestParam Long userId){
-        return transactionService.readBalance(userId);
+    public ResponseEntity<Balance> readBalance(){
+        return transactionService.readBalance(authService.getJwtUserId());
     }
     @PutMapping(path = "/update")
     public ResponseEntity<String> update(@RequestParam Long transactionId,@Valid @RequestBody Transaction updateInfo){
-        return transactionService.update(transactionId, updateInfo);
+        return transactionService.update(transactionId, updateInfo, authService.getJwtUserId());
     }
 
     //OBAVEZNO PROMENITI OVO SA USER ID
