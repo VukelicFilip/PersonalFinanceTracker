@@ -3,6 +3,7 @@ package com.example.personalfinancetracker.controller;
 import com.example.personalfinancetracker.model.Balance;
 import com.example.personalfinancetracker.model.Transaction;
 import com.example.personalfinancetracker.model.TransactionDTO;
+import com.example.personalfinancetracker.service.AuthService;
 import com.example.personalfinancetracker.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,14 @@ import java.util.List;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final AuthService authService;
 
     //staviti status 201 created
     @PostMapping(path = "/create")
-    public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction, @RequestParam Long userId) {
+    public ResponseEntity<String> create(@Valid @RequestBody Transaction transaction) {
+        System.out.println("PRINT 2");
+        Long userId = authService.getJwtUserId();
+        System.out.println(userId);
         return transactionService.create(transaction,userId);
     }
 
@@ -49,9 +54,10 @@ public class TransactionController {
         return transactionService.update(transactionId, updateInfo);
     }
 
+    //OBAVEZNO PROMENITI OVO SA USER ID
     @DeleteMapping(path = "/delete")
     public ResponseEntity<String> delete(@RequestParam Long transactionId){
-        return transactionService.delete(transactionId);
+        return transactionService.delete(transactionId, 69l);
     }
 
 

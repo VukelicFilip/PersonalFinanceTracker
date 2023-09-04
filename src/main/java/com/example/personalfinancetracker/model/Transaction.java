@@ -1,9 +1,6 @@
 package com.example.personalfinancetracker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,7 @@ public class Transaction {
     @Id
     @GeneratedValue
     Long id;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     TransactionType type;
     @DecimalMin(value = "0.0", inclusive = false, message = "The amount has to be greater than zero")
     BigDecimal amount;

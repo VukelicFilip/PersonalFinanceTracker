@@ -17,6 +17,3 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     void deleteByIdAndUserId(Long id, Long userId);
 }
 
-exception handling
-        security
-testovi

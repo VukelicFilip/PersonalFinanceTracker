@@ -6,10 +6,10 @@ import com.example.personalfinancetracker.model.TransactionDTO;
 import com.example.personalfinancetracker.model.TransactionType;
 import com.example.personalfinancetracker.repository.BalanceRepository;
 import com.example.personalfinancetracker.repository.TransactionRepository;
-import com.example.personalfinancetracker.util.TransactionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -17,12 +17,13 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository repo;
-    private final TransactionMapper transactionMapper;
+    /*private final TransactionMapper transactionMapper;*/
     private final BalanceRepository balanceRepository;
 
     public ResponseEntity<String> create(Transaction transaction, Long userId) {
+        transaction.setUserId(userId);
         repo.save(transaction);
-        Balance balance = balanceRepository.findById(userId).get();
+        /*Balance balance = balanceRepository.findById(userId).get();
         if (transaction.getType().equals(TransactionType.INCOME)) {
             balance.setTotal(balance.getTotal().add(transaction.getAmount()));
             balance.setIncomeTotal(balance.getIncomeTotal().add(transaction.getAmount()));
@@ -30,7 +31,7 @@ public class TransactionService {
             balance.setTotal(balance.getTotal().subtract(transaction.getAmount()));
             balance.setExpenseTotal(balance.getExpenseTotal().add(transaction.getAmount()));
         }
-        balanceRepository.save(balance);
+        balanceRepository.save(balance);*/
         return ResponseEntity.ok("Transaction created successfully");
     }
 
@@ -52,13 +53,13 @@ public class TransactionService {
 
     public ResponseEntity<String> update(Long transactionId, Transaction updateInfo) {
         Transaction toBeUpdated = repo.findById(transactionId).get();
-        transactionMapper.update(toBeUpdated, updateInfo);
+        /*transactionMapper.update(toBeUpdated, updateInfo);*/
         repo.save(toBeUpdated);
         return ResponseEntity.ok("Transaction updated successfully");
     }
 
     public ResponseEntity<String> delete(Long transactionId, Long userId) {
-        repo.deleteByIdAndUserId(transactionId, );
+        repo.deleteByIdAndUserId(transactionId, userId);
         return ResponseEntity.ok("Transaction deleted successfully");
     }
 
