@@ -16,8 +16,8 @@ public class Balance {
 
     @Id
     Long userId;
-    BigDecimal incomeTotal;
-    BigDecimal expenseTotal;
-    BigDecimal total;
+    BigDecimal incomeTotal=BigDecimal.ZERO;
+    BigDecimal expenseTotal=BigDecimal.ZERO;
+    BigDecimal total=BigDecimal.ZERO;
 
 }

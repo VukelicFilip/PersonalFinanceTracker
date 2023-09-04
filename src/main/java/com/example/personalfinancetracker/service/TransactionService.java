@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,14 @@ public class TransactionService {
     public ResponseEntity<String> create(Transaction transaction, Long userId) {
         transaction.setUserId(userId);
         repo.save(transaction);
-        /*Balance balance = balanceRepository.findById(userId).get();
+        Optional<Balance> balanceOptional = balanceRepository.findById(userId);
+        Balance balance;
+        if (balanceOptional.isPresent()) {
+            balance = balanceOptional.get();
+        } else {
+            balance = new Balance();
+            balance.setUserId(userId);
+        }
         if (transaction.getType().equals(TransactionType.INCOME)) {
             balance.setTotal(balance.getTotal().add(transaction.getAmount()));
             balance.setIncomeTotal(balance.getIncomeTotal().add(transaction.getAmount()));
@@ -32,7 +40,7 @@ public class TransactionService {
             balance.setTotal(balance.getTotal().subtract(transaction.getAmount()));
             balance.setExpenseTotal(balance.getExpenseTotal().add(transaction.getAmount()));
         }
-        balanceRepository.save(balance);*/
+        balanceRepository.save(balance);
         return ResponseEntity.ok("Transaction created successfully");
     }
 
@@ -48,7 +56,7 @@ public class TransactionService {
         return ResponseEntity.ok(repo.findByUserIdAndType(userId, TransactionType.EXPENSE));
     }
 
-    public ResponseEntity<Balance> readBalance(Long userId){
+    public ResponseEntity<Balance> readBalance(Long userId) {
         return ResponseEntity.ok(balanceRepository.findById(userId).get());
     }
 
